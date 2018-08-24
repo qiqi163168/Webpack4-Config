@@ -1,0 +1,26 @@
+{
+  "name": "webpack4-config",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+  
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.1.0",
+    "webpack": "^4.17.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qiqi163168/Webpack4-Config.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qiqi163168/Webpack4-Config/issues"
+  },
+  "homepage": "https://github.com/qiqi163168/Webpack4-Config#readme"
+}
