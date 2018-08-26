@@ -1,5 +1,5 @@
 const path = require('path');
-// const webpack = require('webpack');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin") 
 
@@ -14,7 +14,8 @@ const config = {
     // import引用
     resolve: {
         alias: {
-            node_modules: path.resolve(__dirname, 'node_modules')
+            node_modules: path.resolve(__dirname, 'node_modules'),
+            components  : path.resolve(__dirname, 'src/components')
         }
     },
     module: {
@@ -22,11 +23,15 @@ const config = {
             // css-loader,style-loader
             {
                 test: /\.css$/,
-                use: [
-                    { loader: MiniCssExtractPlugin.loader },
-                    { loader: "style-loader" },
-                    { loader: "css-loader" },
-                ]
+                use: [ 'style-loader', 'css-loader' ]
+            },
+            // url-loader
+            {
+                test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+                loader: 'url-loader',
+                options: {
+                    limit: 10000
+                }
             },
             // bable-loader
             {
@@ -39,6 +44,7 @@ const config = {
                     }
                 }
             },
+        
 
         ]
     },
@@ -51,16 +57,17 @@ const config = {
         }),
         // 独立css文件
         new MiniCssExtractPlugin({
-            // Options similar to the same options in webpackOptions.output
-            // both options are optional
-            filename: "[name].css",
-            chunkFilename: "[id].css"
+            filename: "[name].css"
         }),
+        // 局部热加载
+        new webpack.HotModuleReplacementPlugin(),
     ],
     optimization: {
         minimize: false
     },
     devServer: {
+        hot: true,
+        inline: true,
         contentBase: './dist',
         port: 9990,
         historyApiFallback: {
