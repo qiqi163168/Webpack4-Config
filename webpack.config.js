@@ -7,10 +7,11 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const config = {
     entry: './src/app.jsx',
     output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js'
+        path      : path.resolve(__dirname, 'dist'),
+        publicPath: '/dist/',
+        filename  : 'assets/js/[name].js'
     },
-    mode: "production",
+    mode: "development",
     // import引用
     resolve: {
         alias: {
@@ -20,22 +21,37 @@ const config = {
     },
     module: {
         rules: [
-            // css-loader,style-loader
             {
-                test: /\.css$/,
-                use: [ 'style-loader', 'css-loader' ]
+                test: /\.(sass|scss|css)$/,
+                use: ["style-loader", "css-loader","sass-loader"]
             },
+            // MiniCssExtractPlugin与style-loader无法共存
+            // 保留MiniCssExtractPlugin - 可见打包出main.css
+            // 保留style-loader - 可使用样式热加载
+            // {
+            //     test: /\.(sass|scss|css)$/,
+            //     use: [MiniCssExtractPlugin.loader, "css-loader","sass-loader"]
+            // },
             // url-loader
             {
-                test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+                test: /\.(png|jpg|gif)$/,
                 loader: 'url-loader',
                 options: {
-                    limit: 10000
+                    limit: 2048,
+                    name : 'assets/resource/[name].[ext]' 
+                }
+            },
+            {
+                test: /\.(svg|eot|ttf|woff|woff2)$/,
+                loader: 'url-loader',
+                options: {
+                    limit: 8192,
+                    name : 'assets/resource/[name].[ext]' 
                 }
             },
             // bable-loader
             {
-                test: /\.jsx$/,
+                test: /\.(js|jsx)$/,
                 exclude: /(node_modules)/,
                 use: {
                     loader: 'babel-loader',
@@ -44,8 +60,6 @@ const config = {
                     }
                 }
             },
-        
-
         ]
     },
     plugins: [
@@ -57,13 +71,14 @@ const config = {
         }),
         // 独立css文件
         new MiniCssExtractPlugin({
-            filename: "[name].css"
+            filename: "assets/css/[name].css",
+            chunkFilename: "[id].css"
         }),
         // 局部热加载
         new webpack.HotModuleReplacementPlugin(),
     ],
     optimization: {
-        minimize: false
+        minimize: true,
     },
     devServer: {
         hot: true,

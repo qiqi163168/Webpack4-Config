@@ -1,10 +1,11 @@
 import React from 'react';
+import './index.scss';
 
 class Test extends React.Component{
     render(){
         return(
-            <div>
-                My name is xxx,asldfkj...？？？？.
+            <div className='myName'>
+                My name isdddsafdafdfffff
             </div>
         )
     }
